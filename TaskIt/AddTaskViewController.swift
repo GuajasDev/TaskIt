@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AddTaskViewController: UIViewController {
     
@@ -19,8 +20,6 @@ class AddTaskViewController: UIViewController {
     @IBOutlet weak var dueDatePicker: UIDatePicker!
     
     // MARK: Variables
-    
-    var mainVC:ViewController!
     
     // MARK: - BODY
     
@@ -45,11 +44,39 @@ class AddTaskViewController: UIViewController {
     //MARK: IBActions
     
     @IBAction func addTaskButtonTapped(sender: UIButton) {
-        // Create a new TaskModel instance with whatever the user added into the textFields and datePicker
-        var task  = TaskModel(task: taskTextField.text, subTask: taskTextField.text, date: dueDatePicker.date, completed: false)
+        // Get access to the AppDelegate. UIApplication represents our entire application and it has an instance called 'sharedApplication()', from that we can get the delegate of the entire application which is (in this case) AppDelegate. We then specify it is AppDelegate using the 'as' keyword.
+        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
         
-        // Add the task to the taskArray in the ViewController (using the mainVC property)
-        mainVC.baseArray[0].append(task)
+        // Accecss the managedObjectContext
+        let managedObjectContext = appDelegate.managedObjectContext
+        
+        // Create an entityDescription and pass in the entity name and the managedObjectContext (which we got from our AppDelegate)
+        let entityDescription = NSEntityDescription.entityForName("TaskModel", inManagedObjectContext: managedObjectContext!)
+        
+        // Create a TaskModel instance, which we do by passing in our entityDescription instance and insert it into the managedObjectContext
+        let task = TaskModel(entity: entityDescription!, insertIntoManagedObjectContext: managedObjectContext!)
+        
+        // Access the TaskModel properties
+        task.task = taskTextField.text
+        task.subtask = subtaskTextField.text
+        task.date = dueDatePicker.date
+        task.completed = false
+        
+        // Save any changes that we made to the entity
+        appDelegate.saveContext()
+        
+        // Request ALL instances of TaskModel
+        var request = NSFetchRequest(entityName: "TaskModel")
+        
+        // We assign nil to the error because we only wanna create it if an error exists
+        var error: NSError? = nil
+        
+        // Get ALL the instances from the request we made to the entitty and save them in an NSArray. We put an '&' sign before error, this way if there IS an error it gets saved into that instance, otherwise it is nil (as specified above)
+        var results:NSArray = managedObjectContext!.executeFetchRequest(request, error: &error)!
+        
+        for res in results {
+            println(res)
+        }
         
         // Dismiss the AddTaskViewController
         self.dismissViewControllerAnimated(true, completion: nil)

@@ -20,7 +20,6 @@ class TaskDetailViewController: UIViewController {
     
     // MARK: Variables
     
-    var mainVC: ViewController!
     var detailTaskModel: TaskModel!
     
     // MARK: - BODY
@@ -32,7 +31,7 @@ class TaskDetailViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.taskTextField.text = detailTaskModel.task
-        self.subtaskTextField.text = detailTaskModel.subTask
+        self.subtaskTextField.text = detailTaskModel.subtask
         self.dueDatePicker.date = detailTaskModel.date
     }
 
@@ -49,10 +48,18 @@ class TaskDetailViewController: UIViewController {
     }
     
     @IBAction func doneBarButtonTapped(sender: UIBarButtonItem) {
-        var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date, completed: false)
         
-        // Replace the instance in the ViewController's taskArray that is at the indexPath of the selected row with the new values saved in task
-        mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow()!.row] = task
+        // Create an AppDelegate instance
+        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+        
+        // Update the entity instance
+        detailTaskModel.task = taskTextField.text
+        detailTaskModel.subtask = subtaskTextField.text
+        detailTaskModel.date = dueDatePicker.date
+        detailTaskModel.completed = detailTaskModel.completed
+        
+        // Save the changes to CoreData
+        appDelegate.saveContext()
         
         // Pop back to the ViewController
         self.navigationController?.popViewControllerAnimated(true)
