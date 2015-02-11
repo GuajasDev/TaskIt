@@ -13,6 +13,11 @@
 		D417346A1A8B2E20007CF21E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D41734691A8B2E20007CF21E /* Images.xcassets */; };
 		D417346D1A8B2E20007CF21E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D417346B1A8B2E20007CF21E /* LaunchScreen.xib */; };
 		D41734791A8B2E20007CF21E /* TaskItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41734781A8B2E20007CF21E /* TaskItTests.swift */; };
+		D41734851A8B3DEA007CF21E /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41734841A8B3DEA007CF21E /* TaskTableViewCell.swift */; };
+		D41734871A8B50AD007CF21E /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41734861A8B50AD007CF21E /* TaskModel.swift */; };
+		D41734891A8B5293007CF21E /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41734881A8B5293007CF21E /* TaskDetailViewController.swift */; };
+		D417348B1A8B5CAA007CF21E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = D417348A1A8B5CAA007CF21E /* Date.swift */; };
+		D417348D1A8B6063007CF21E /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D417348C1A8B6063007CF21E /* AddTaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,11 @@
 		D41734721A8B2E20007CF21E /* TaskItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskItTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D41734771A8B2E20007CF21E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D41734781A8B2E20007CF21E /* TaskItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItTests.swift; sourceTree = "<group>"; };
+		D41734841A8B3DEA007CF21E /* TaskTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaskTableViewCell.swift; path = ../TaskTableViewCell.swift; sourceTree = "<group>"; };
+		D41734861A8B50AD007CF21E /* TaskModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
+		D41734881A8B5293007CF21E /* TaskDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
+		D417348A1A8B5CAA007CF21E /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		D417348C1A8B6063007CF21E /* AddTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +89,11 @@
 			children = (
 				D41734621A8B2E20007CF21E /* AppDelegate.swift */,
 				D41734641A8B2E20007CF21E /* ViewController.swift */,
+				D41734881A8B5293007CF21E /* TaskDetailViewController.swift */,
+				D417348C1A8B6063007CF21E /* AddTaskViewController.swift */,
+				D41734861A8B50AD007CF21E /* TaskModel.swift */,
+				D41734841A8B3DEA007CF21E /* TaskTableViewCell.swift */,
+				D417348A1A8B5CAA007CF21E /* Date.swift */,
 				D41734661A8B2E20007CF21E /* Main.storyboard */,
 				D41734691A8B2E20007CF21E /* Images.xcassets */,
 				D417346B1A8B2E20007CF21E /* LaunchScreen.xib */,
@@ -213,7 +228,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D41734651A8B2E20007CF21E /* ViewController.swift in Sources */,
+				D417348B1A8B5CAA007CF21E /* Date.swift in Sources */,
 				D41734631A8B2E20007CF21E /* AppDelegate.swift in Sources */,
+				D41734871A8B50AD007CF21E /* TaskModel.swift in Sources */,
+				D41734851A8B3DEA007CF21E /* TaskTableViewCell.swift in Sources */,
+				D41734891A8B5293007CF21E /* TaskDetailViewController.swift in Sources */,
+				D417348D1A8B6063007CF21E /* AddTaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
