@@ -9,6 +9,12 @@
 import UIKit
 import CoreData
 
+// Both of these functions are required by any class that conforms to the protocol
+protocol AddTaskViewControllerDelegate {
+    func addTask(message: String)
+    func addTaskCancelled(message: String)
+}
+
 class AddTaskViewController: UIViewController {
     
     // MARK: - PROPERTIES
@@ -21,14 +27,18 @@ class AddTaskViewController: UIViewController {
     
     // MARK: Variables
     
+    // REMEMBER to set the delegate variable!! It's an easy way to access the TaskDetailViewControllerDelegate
+    var delegate: AddTaskViewControllerDelegate?
+    
     // MARK: - BODY
     
     // MARK: Initialisers
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,6 +49,9 @@ class AddTaskViewController: UIViewController {
     @IBAction func cancelButtonTapped(sender: UIButton) {
         // Because AddTaskDetailViewController is NOT part of the navigationController (ie we don't have a header) we don't get access to all the navigationController functions (compare to the cancel button func in TaskDetailViewController)
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        // VERY important that this is called AFTER  the AddTaskViewController is dismissed, because the class that conforms to the delegate is ViewController, which is not on the window hierarchy UNTIL the AddTaskViewController is dismissed
+        delegate?.addTaskCancelled("Task was not added!")
     }
     
     //MARK: IBActions
@@ -57,10 +70,21 @@ class AddTaskViewController: UIViewController {
         let task = TaskModel(entity: entityDescription!, insertIntoManagedObjectContext: managedObjectContext!)
         
         // Access the TaskModel properties
-        task.task = taskTextField.text
+        if NSUserDefaults.standardUserDefaults().boolForKey(kShouldCapitaliseTaskKey) == true {
+            task.task = taskTextField.text.capitalizedString
+        } else {
+            task.task = taskTextField.text
+        }
+        
         task.subtask = subtaskTextField.text
         task.date = dueDatePicker.date
         task.completed = false
+        
+        if NSUserDefaults.standardUserDefaults().boolForKey(kShouldCompleteNewTodoKey) == true {
+            task.completed = true
+        } else {
+            task.completed = false
+        }
         
         // Save any changes that we made to the entity
         appDelegate.saveContext()
@@ -80,5 +104,8 @@ class AddTaskViewController: UIViewController {
         
         // Dismiss the AddTaskViewController
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        // VERY important that this is called AFTER  the AddTaskViewController is dismissed, because the class that conforms to the delegate is ViewController, which is not on the window hierarchy UNTIL the AddTaskViewController is dismissed
+        delegate?.addTask("Task Added!")
     }
 }

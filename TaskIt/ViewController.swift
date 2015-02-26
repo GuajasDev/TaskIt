@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, TaskDetailViewControllerDelegate, AddTaskViewControllerDelegate {
     // UITableViewDataSource and UITableViewDelegate are classes that define protocols. Apple added functions to this protocols and Apple (or the protocols  or callbacks) are going to be responsible for when to call this functions. We won't be writing self.tableview(...), that's Apple's job. We can help trigger some functions, like telling the table to refresh itself, but we won't be calling them explicitly.
     // In the real world, people on official business are often required to follow strict procedures when dealing with certain situations. Law enforcement officials, for example, are required to “follow protocol” when making enquiries or collecting evidence. In Object-Oriented Programming, objects can do the same. Swift allows you to define protocols, which declare the methods EXPECTED to be used for a particular situation, which means that the class must implement the required methods. A protocol declares methods and properties that are independent of any specific class.
     
@@ -32,6 +32,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
         self.fetchedResultsController = getFetchedResultsController()
         self.fetchedResultsController.delegate = self
@@ -63,9 +65,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             // Make the 'detailTaksModel' property in detailVC equal to 'thisTask'
             detailVC.detailTaskModel = thisTask
+            
+            // Set self as the delegate for the TaskDetailViewControllerDelegate
+            detailVC.delegate = self
         }
         else if segue.identifier == "showTaskAdd" {
             let addTaskVC:AddTaskViewController = segue.destinationViewController as AddTaskViewController
+            
+            // Set the delegate
+            addTaskVC.delegate = self
         }
     }
     
@@ -119,22 +127,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "To do"
+        
+        if fetchedResultsController.sections?.count == 1 {
+            // If there is only one section stored, is it 'Completed' or 'To do'?
+            
+            // Get the TaskModel
+            let fetchedObjects = fetchedResultsController.fetchedObjects!
+            let testTask:TaskModel = fetchedObjects[0] as TaskModel
+            
+            if testTask.completed == true {
+                return "Completed"
+            } else {
+                return "To do"
+            }
         } else {
-            return "Completed"
+            // There is more than one section, so the first one (indexed 0) will always be 'To do' and second one 'Completed'
+            if section == 0 {
+                return "To do"
+            } else {
+                return "Completed"
+            }
         }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // Adds functionality when a table cell is swiped. See 'cellForRowAtIndexPath' for an explanation on objectAtIndexPath
         let thisTask = self.fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
         
-        if indexPath.section == 0 {
-            thisTask.completed = true
-        } else {
-            thisTask.completed = false
-        }
+        // If it is completed then uncomplete it, otherwise if it is not complete then complete it
+        thisTask.completed = !Bool(thisTask.completed)
         
         // Remove the task that was swiped
         (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
@@ -169,4 +194,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         return self.fetchedResultsController
     }
+    
+    func showAlert(message: String = "Congratulations") {
+        var alert = UIAlertController(title: "Change Made!", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok!", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: TaskDetailViewControllerDelegate
+    
+    func taskDetailEdited() {
+        // Called when the doneBarButtonItem is tapped in the TaskDetailVC
+        
+        showAlert()
+    }
+    
+    // MARK: AddTaskViewControllerDelegate
+    
+    func addTaskCancelled(message: String) {
+        showAlert(message: message)
+    }
+    
+    func addTask(message: String) {
+        showAlert(message: message)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

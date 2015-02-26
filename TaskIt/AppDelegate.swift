@@ -9,14 +9,31 @@
 import UIKit
 import CoreData
 
+// MARK: Global Constants
+
+let kShouldCapitaliseTaskKey = "shouldCapitaliseTask"
+let kShouldCompleteNewTodoKey = "completeNewTodo"
+let kLoadedOnceKey = "loadOnce"
+
 @UIApplicationMain
+
+// MARK: - AppDelegate
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Check if this is the first time ever the application is run by the user
+        if NSUserDefaults.standardUserDefaults().boolForKey(kLoadedOnceKey) == false {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: kLoadedOnceKey)
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: kShouldCapitaliseTaskKey)
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: kShouldCompleteNewTodoKey)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        
         return true
     }
 

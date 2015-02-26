@@ -8,6 +8,12 @@
 
 import UIKit
 
+// @objc means you can have both optional and obligatory functions
+@objc protocol TaskDetailViewControllerDelegate {
+    // So basically if the delegate is the ViewController these functions are defined in the ViewController, but the responsability of running them and calling them relies on the TaskDetailViewController
+    optional func taskDetailEdited()
+}
+
 class TaskDetailViewController: UIViewController {
     
     // MARK: - PROPERTIES
@@ -19,6 +25,8 @@ class TaskDetailViewController: UIViewController {
     @IBOutlet weak var dueDatePicker: UIDatePicker!
     
     // MARK: Variables
+    // REMEMBER to set the delegate variable!! It's an easy way to access the TaskDetailViewControllerDelegate
+    var delegate: TaskDetailViewControllerDelegate?
     
     var detailTaskModel: TaskModel!
     
@@ -28,8 +36,9 @@ class TaskDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         self.taskTextField.text = detailTaskModel.task
         self.subtaskTextField.text = detailTaskModel.subtask
         self.dueDatePicker.date = detailTaskModel.date
@@ -63,5 +72,8 @@ class TaskDetailViewController: UIViewController {
         
         // Pop back to the ViewController
         self.navigationController?.popViewControllerAnimated(true)
+
+        // delegate in this case is ViewController
+        delegate?.taskDetailEdited!()
     }
 }
